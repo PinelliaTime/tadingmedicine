@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>雷雷吃药提醒</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "cute-pink": "#FF69B4",
+              "cute-purple": "#DA70D6",
+              "cute-light-pink": "#FFB6C1",
+              "cute-ultra-light-pink": "#FFF0F5",
+              "cute-yellow": "#FFFACD",
+            },
+            fontFamily: {
+              comic: ['"Comic Neue"', "cursive"],
+              inter: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .hello-kitty-bg {
+          background-image: url("https://picsum.photos/id/1015/800/600");
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0.15;
+          z-index: 0;
+        }
+        .kitty-card {
+          position: relative;
+          overflow: hidden;
+          border-radius: 24px;
+          box-shadow: 0 10px 25px rgba(255, 105, 180, 0.1);
+        }
+        .float-animation {
+          animation: float 3s ease-in-out infinite;
+        }
+        .pulse-slow {
+          animation: pulse-slow 4s infinite;
+        }
+        .bounce-in {
+          animation: bounce-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-pop {
+          transition: transform 0.2s;
+        }
+        .btn-pop:hover {
+          transform: scale(1.05);
+        }
+        .btn-pop:active {
+          transform: scale(0.95);
+        }
+        .rainbow-text {
+          background: linear-gradient(90deg, #ff69b4, #da70d6);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+        @keyframes pulse-slow {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.7;
+          }
+        }
+        @keyframes bounce-in {
+          0% {
+            transform: scale(0.3);
+            opacity: 0;
+          }
+          50% {
+            transform: scale(1.05);
+            opacity: 1;
+          }
+          70% {
+            transform: scale(0.9);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="font-inter bg-gradient-to-b from-cute-ultra-light-pink to-white min-h-screen flex flex-col items-center justify-start p-4 sm:p-6"
+  >
+    <!-- 装饰性浮动元素 -->
+    <div
+      class="fixed top-16 left-6 w-8 h-8 bg-cute-pink/20 rounded-full float-animation"
+      style="animation-delay: 0s"
+    ></div>
+    <div
+      class="fixed top-24 right-8 w-6 h-6 bg-cute-purple/20 rounded-full float-animation"
+      style="animation-delay: 0.7s"
+    ></div>
+    <div
+      class="fixed bottom-20 left-10 w-10 h-10 bg-cute-light-pink/20 rounded-full float-animation"
+      style="animation-delay: 1.4s"
+    ></div>
+    <div
+      class="fixed bottom-16 right-6 w-7 h-7 bg-cute-yellow/30 rounded-full float-animation"
+      style="animation-delay: 2s"
+    ></div>
+
+    <div class="w-full max-w-md mx-auto relative z-10">
+      <!-- 头部 -->
+      <header class="text-center mb-6 pt-6">
+        <h1 class="font-comic text-[clamp(1.8rem,5vw,2.3rem)] font-bold rainbow-text mb-2 tracking-tight">
+          雷雷吃药提醒
+        </h1>
+        <p class="text-gray-600 text-sm font-comic">按时吃药，健康每一天~</p>
+      </header>
+
+      <!-- 主内容区 -->
+      <main class="kitty-card bg-white/90 backdrop-blur-sm p-6 sm:p-8 mb-8">
+        <!-- Hello Kitty背景图 -->
+        <div class="hello-kitty-bg"></div>
+
+        <div class="relative z-10">
+          <!-- 当前日期 -->
+          <div class="mb-8 text-center">
+            <div class="inline-block px-5 py-2 rounded-full bg-cute-pink/10 mb-2">
+              <p class="text-cute-pink font-medium">今天是</p>
+            </div>
+            <p id="current-date" class="font-comic text-[clamp(1.6rem,4vw,2rem)] font-bold text-gray-800"></p>
+          </div>
+
+          <!-- 药量信息 -->
+          <div class="mb-10 text-center">
+            <div class="inline-block w-4/5 p-4 rounded-2xl bg-cute-light-pink/20 float-animation">
+              <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4 mx-auto shadow-md">
+                <i class="fa-solid fa-pills text-4xl text-cute-pink"></i>
+              </div>
+              <p class="text-gray-700 mb-2 font-medium">今日药量</p>
+              <p id="pill-amount" class="font-comic text-[clamp(2rem,6vw,2.5rem)] font-bold rainbow-text"></p>
+            </div>
+          </div>
+
+          <!-- 吃药状态 -->
+          <div id="pill-status" class="text-center">
+            <!-- 未吃药状态 -->
+            <div id="not-taken" class="bounce-in">
+              <button
+                id="take-pill-btn"
+                class="bg-gradient-to-r from-cute-pink to-cute-purple text-white font-comic text-lg font-bold py-3.5 px-9 rounded-full shadow-lg btn-pop pulse-slow"
+              >
+                <i class="fa-solid fa-heart mr-2"></i>吃药药
+              </button>
+              <p class="text-gray-500 text-sm mt-4 font-comic">按时吃药才能保持健康哦~</p>
+            </div>
+
+            <!-- 已吃药状态 -->
+            <div id="taken" class="hidden bounce-in">
+              <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-5 mx-auto shadow-md">
+                <i class="fa-solid fa-check text-4xl text-green-500"></i>
+              </div>
+              <p class="font-comic text-[clamp(1.3rem,4vw,1.6rem)] font-bold text-green-600">药药已经吃了</p>
+              <p class="text-gray-500 text-sm mt-3 font-comic">真棒！继续保持健康习惯~</p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- 底部信息 -->
+      <footer class="text-center text-gray-400 text-xs mb-4">
+        <p class="font-comic">吃药提醒 · 关爱你的健康</p>
+        <p class="mt-1">从2025年5月8日开始计算药量</p>
+      </footer>
+    </div>
+
+    <script>
+      // 日期计算和吃药逻辑
+      document.addEventListener("DOMContentLoaded", function () {
+        // 获取当前日期
+        const today = new Date();
+        const formattedDate = formatDate(today);
+
+        // 显示当前日期
+        document.getElementById("current-date").textContent = formattedDate;
+
+        // 计算药量
+        const startDate = new Date(2025, 4, 8); // 注意：月份从0开始，所以4代表5月
+        const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+
+        // 根据规律计算药量
+        let pillAmount;
+        if (daysPassed < 0) {
+          pillAmount = "还没到开始日期哦";
+        } else {
+          const cycleDay = daysPassed % 4;
+          switch (cycleDay) {
+            case 0:
+            case 2:
+              pillAmount = "2颗";
+              break;
+            case 1:
+            case 3:
+              pillAmount = "2颗半";
+              break;
+            default:
+              pillAmount = "0颗";
+          }
+        }
+
+        // 显示药量
+        document.getElementById("pill-amount").textContent = pillAmount;
+
+        // 检查是否已经吃药
+        const takenDates = JSON.parse(localStorage.getItem("takenDates") || "[]");
+        const hasTaken = takenDates.includes(formattedDate);
+
+        // 更新UI显示
+        updateStatus(hasTaken);
+
+        // 绑定吃药按钮事件
+        document.getElementById("take-pill-btn").addEventListener("click", function () {
+          // 添加当前日期到已吃药列表
+          const newTakenDates = [...takenDates, formattedDate];
+          localStorage.setItem("takenDates", JSON.stringify(newTakenDates));
+
+          // 更新UI显示
+          updateStatus(true);
+
+          // 添加成功动画
+          const btn = this;
+          btn.innerHTML = '<i class="fa-solid fa-heart mr-2"></i>已完成！';
+          btn.classList.remove("pulse-slow");
+          btn.classList.add("bg-green-500");
+
+          setTimeout(() => {
+            document.getElementById("taken").classList.remove("hidden");
+            document.getElementById("taken").classList.add("bounce-in");
+          }, 500);
+        });
+
+        // 更新状态显示
+        function updateStatus(hasTaken) {
+          if (hasTaken) {
+            document.getElementById("not-taken").classList.add("hidden");
+            document.getElementById("taken").classList.remove("hidden");
+          } else {
+            document.getElementById("not-taken").classList.remove("hidden");
+            document.getElementById("taken").classList.add("hidden");
+          }
+        }
+
+        // 格式化日期为"YYYY年MM月DD日"
+        function formatDate(date) {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          return `${year}年${month}月${day}日`;
+        }
+      });
+    </script>
+  </body>
+</html>
